@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Image Filter</h1>
+
+<form id="imageForm">
+    <label for="imgLoad">Load image</label>
+    <input type="file" id="imgLoad" name="file">
+    <button type="submit">Upload</button>
+</form>
+<form>
+    <label for="grey">Grey filter</label>
+    <input type="radio" name="filters" id="grey">
+    <label for="blur">Blur filter</label>
+    <input type="radio" name="filters" id="blur">
+    <label for="inversion">Inversion filter</label>
+    <input type="radio" name="filters" id="inversion">
+</form>
+<img id="uploadedImage" src="" alt="Uploaded Image" style="max-width: 500px;" />
+<img src="" id="filteredImg">
+
+<script>
+    const radioGrey = document.getElementById("grey");
+    const form = document.getElementById('imageForm');
+    form.onsubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        try {
+            const uploadResponse = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (uploadResponse.ok) {
+                const response = await fetch('/picture');
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+                document.getElementById('uploadedImage').src = imageUrl;
+            } else {
+                console.error("Ошибка при загрузке изображения");
+            }
+
+        if(radioGrey.checked) {
+            if (uploadResponse.ok) {
+                const response = await fetch('/filter/grey');
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+                document.getElementById('filteredImg').src = imageUrl;
+            } else {
+                console.error("Ошибка при загрузке изображения");
+            }
+        }
+
+
+        } catch (error) {
+            console.error("Ошибка:", error);
+        }
+
+
+    };
+
+
+</script>
+</body>
+</html>

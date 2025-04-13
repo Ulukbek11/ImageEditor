@@ -25,6 +25,9 @@
 
 <script>
     const radioGrey = document.getElementById("grey");
+    const radioInversion = document.getElementById("inversion");
+    const radioBlur = document.getElementById("blur");
+
     const form = document.getElementById('imageForm');
     form.onsubmit = async (event) => {
         event.preventDefault();
@@ -55,6 +58,28 @@
                 console.error("Ошибка при загрузке изображения");
             }
         }
+
+            if(radioInversion.checked) {
+                if (uploadResponse.ok) {
+                    const response = await fetch('/filter/inversion');
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    document.getElementById('filteredImg').src = imageUrl;
+                } else {
+                    console.error("Ошибка при загрузке изображения");
+                }
+            }
+
+            if(radioBlur.checked) {
+                if (uploadResponse.ok) {
+                    const response = await fetch('/filter/blur');
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    document.getElementById('filteredImg').src = imageUrl;
+                } else {
+                    console.error("Ошибка при загрузке изображения");
+                }
+            }
 
 
         } catch (error) {

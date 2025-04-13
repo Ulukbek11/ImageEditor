@@ -46,5 +46,25 @@ public class ImageController {
                 .body(finalImage);
     }
 
+    @GetMapping("/filter/inversion")
+    public ResponseEntity<byte[]> getFilterInversionImage() throws IOException {
+        if (mainImage == null) {
+            return ResponseEntity.notFound().build();
+        }
+        finalImage = imageFilterService.colorInversionFilter(mainImage);
+        return ResponseEntity.ok().body(finalImage);
+    }
+
+    @GetMapping("/filter/blur")
+    public ResponseEntity<byte[]> getImageBlur() throws IOException {
+        if (mainImage == null) {
+            return ResponseEntity.notFound().build();
+        }
+        finalImage = imageFilterService.blurEffect(mainImage);
+        return ResponseEntity.ok().body(finalImage);
+    }
+
+
+
 
 }
